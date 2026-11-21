@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Add Room" %} — {{ house.name }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10 col-md-12">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-primary text-white text-center rounded-top-4 py-3">
+          <h3 class="fw-bold mb-1">{% trans "Add a New Room" %}</h3>
+          <p class="mb-0 text-light">{% trans "Fill in all the details and upload up to 4 images" %}</p>
+        </div>
+
+        <div class="card-body p-4">
+          <form method="POST" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {{ formset.management_form }}
+
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ form.name.label }}</label>
+                {{ form.name }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ form.beds.label }}</label>
+                {{ form.beds }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ form.sofas.label }}</label>
+                {{ form.sofas }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ form.floor.label }}</label>
+                {{ form.floor }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ form.price_per_night.label }}</label>
+                {{ form.price_per_night }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ form.discount.label }}</label>
+                <div class="input-group">
+                  {{ form.discount }}
+                  <span class="input-group-text">%</span>
+                </div>
+              </div>
+              <div class="col-md-6 d-flex align-items-center mt-3">
+                <div class="form-check">
+                  {{ form.available }}
+                  <label class="form-check-label">{{ form.available.label }}</label>
+                </div>
+              </div>
+            </div>
+
+            <h5 class="fw-bold text-secondary mb-3">{% trans "Room Features" %}</h5>
+            <div class="row g-3 mb-4">
+              <div class="col-md-4">
+                <div class="form-check">
+                  {{ form.smoking_allowed }}
+                  <label class="form-check-label">{{ form.smoking_allowed.label }}</label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  {{ form.has_balcony }}
+                  <label class="form-check-label">{{ form.has_balcony.label }}</label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  {{ form.has_tv }}
+                  <label class="form-check-label">{{ form.has_tv.label }}</label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  {{ form.has_air_conditioning }}
+                  <label class="form-check-label">{{ form.has_air_conditioning.label }}</label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  {{ form.has_wifi }}
+                  <label class="form-check-label">{{ form.has_wifi.label }}</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-semibold">{{ form.description.label }}</label>
+              {{ form.description }}
+            </div>
+
+            <hr class="my-4">
+            <h5 class="fw-bold mb-3 text-secondary">{% trans "Room Images (max 4)" %}</h5>
+
+            <div id="image-container" class="d-flex flex-wrap gap-3 mb-4">
+              {% for img_form in formset.forms %}
+              <div class="image-slot position-relative border border-2 border-dashed rounded-4 d-flex align-items-center justify-content-center bg-light"
+                  style="width:130px; height:130px; cursor:pointer; transition:0.3s; overflow:hidden;">
+                {% if img_form.instance.pk and img_form.instance.image %}
+                <img src="{{ img_form.instance.image.url }}" class="img-preview rounded-4"
+                    style="width:100%; height:100%; object-fit:cover;">
+                {% else %}
+                <img class="img-preview rounded-4" style="width:100%; height:100%; object-fit:cover; display:none;">
+                {% endif %}
+
+                <div style="display:none;">
+                  {{ img_form.image }}
+                  {% if img_form.DELETE %}
+                  {{ img_form.DELETE }}
+                  {% endif %}
+                  {% if img_form.id %}
+                  {{ img_form.id }}
+                  {% endif %}
+                </div>
+
+                <span class="remove-btn position-absolute top-0 end-0 bg-danger text-white fw-bold rounded-circle px-2"
+                      style="cursor:pointer; font-size:18px; line-height:1;">×</span>
+              </div>
+              {% endfor %}
+            </div>
+
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-success btn-lg fw-semibold rounded-pill">
+                {% trans "Add Room" %}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const imageSlots = document.querySelectorAll('.image-slot');
+
+  imageSlots.forEach(slot => {
+    const input = slot.querySelector('input[type="file"]');
+    const preview = slot.querySelector('.img-preview');
+    const removeBtn = slot.querySelector('.remove-btn');
+
+    input.style.display = 'none';
+
+    slot.addEventListener('click', e => {
+      if (e.target === removeBtn) return;
+      input.click();
+    });
+
+    input.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = 'block';
+        removeBtn.style.display = 'block';
+        slot.classList.remove('bg-light');
+        slot.classList.add('border-primary');
+      }
+    });
+
+    removeBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      input.value = '';
+      preview.style.display = 'none';
+      removeBtn.style.display = 'none';
+      const deleteCheckbox = slot.querySelector('input[type="checkbox"]');
+      if (deleteCheckbox) deleteCheckbox.checked = true;
+      slot.classList.add('bg-light');
+      slot.classList.remove('border-primary');
+    });
+  });
+});
+</script>
+{% endblock %}

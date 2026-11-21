@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}
+{% trans "Room booking" %} — {{ room.name }}
+{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+{% endblock %}
+
+{% block content %}
+{{ booked_ranges|json_script:"booked-ranges-data" }}
+<div class="container my-5">
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 rounded-4">
+
+                <div class="card-header bg-primary text-white text-center rounded-top-4">
+                    <h3 class="mb-0">{% trans "Book room" %}</h3>
+                    <small>{{ room.name }} · {{ room.house.name }}</small>
+                </div>
+
+                <div class="card-body p-4">
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        {# Общие ошибки формы #}
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}<br>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <h5 class="mb-3">{% trans "Guest information" %}</h5>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{% trans "First name" %}</label>
+                                {{ form.first_name }}
+                                {% if form.first_name.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.first_name.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{% trans "Last name" %}</label>
+                                {{ form.last_name }}
+                                {% if form.last_name.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.last_name.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">{% trans "Email" %}</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.email.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <h5 class="mb-3">{% trans "Booking dates" %}</h5>
+
+                        <div class="mb-4">
+                            <label class="form-label">{% trans "Select dates" %}</label>
+                            {{ form.date_range }}
+                            {% if form.date_range.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.date_range.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        {# Hidden real fields #}
+                        {{ form.date_from }}
+                        {{ form.date_to }}
+
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <a href="{% url 'room_detail' room.id %}" class="btn btn-outline-secondary">
+                                ← {% trans "Back to room" %}
+                            </a>
+                            <button type="submit" class="btn btn-success btn-lg px-4">
+                                {% trans "Confirm booking" %}
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <div class="card-footer text-center text-muted small">
+                    {% trans "No payment required at this step" %}
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const bookedRanges = JSON.parse(
+        document.getElementById("booked-ranges-data").textContent
+    );
+
+    const disabledDates = bookedRanges.flatMap(range => {
+        let dates = [];
+        let start = new Date(range.from);
+        let end = new Date(range.to);
+
+        while (start <= end) {
+            dates.push(new Date(start));
+            start.setDate(start.getDate() + 1);
+        }
+        return dates;
+    });
+
+    flatpickr("#id_date_range", {
+        mode: "range",
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        showMonths: 2,
+        disable: disabledDates,
+        onChange(selectedDates) {
+            if (selectedDates.length === 2) {
+                document.getElementById("id_date_from").value =
+                    selectedDates[0].toISOString().split("T")[0];
+                document.getElementById("id_date_to").value =
+                    selectedDates[1].toISOString().split("T")[0];
+            }
+        }
+    });
+</script>
+
+{% endblock %}

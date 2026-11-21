@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Booking successful" %}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+
+            <div class="card shadow-lg border-0 rounded-4 text-center p-4">
+                <div class="card-body">
+
+                    <div class="mb-4">
+                        <div class="rounded-circle bg-success bg-opacity-10 d-inline-flex align-items-center justify-content-center"
+                             style="width: 90px; height: 90px;">
+                            <span class="fs-1 text-success">✓</span>
+                        </div>
+                    </div>
+
+                    <h2 class="fw-bold mb-3">
+                        {% trans "Booking successful!" %}
+                    </h2>
+
+                    <p class="text-muted mb-4">
+                        {% trans "You have successfully booked the room." %}
+                    </p>
+
+                    <div class="border rounded-3 p-3 mb-4">
+                        <h5 class="fw-semibold mb-1">
+                            {{ room.name }}
+                        </h5>
+                        <p class="text-muted mb-0">
+                            {% trans "Thank you for choosing our service." %}
+                        </p>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                       <a href="{% url 'room_detail' room.pk %}" class="btn btn-primary btn-lg">
+                            {% trans "View room details" %}
+                        </a>
+
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                            {% trans "Back to home" %}
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

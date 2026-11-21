@@ -1,0 +1,51 @@
+.star {
+  font-size: 1.25rem;
+  color: #ccc; /* серый для пустых */
+  display: inline-block;
+  position: relative;
+}
+
+.star.full {
+  color: #ffc107; /* жёлтый */
+}
+
+.star.half::before {
+  content: "\2605"; /* полный символ */
+  color: #ffc107;
+  position: absolute;
+  width: 50%;
+  overflow: hidden;
+}
+
+.image-slot input[type="file"],
+.image-slot input[type="checkbox"] {
+  display: none;
+}
+
+.image-slot:hover {
+  border-color: #007bff;
+}
+
+.remove-btn:hover {
+  background-color: #c82333;
+}
+
+
+.large-checkbox {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+.form-check {
+  padding-left: 2.2em;
+  margin-bottom: 0.75rem;
+}
+.form-check-label {
+  margin-left: 0.4em;
+  cursor: pointer;
+  user-select: none;
+  font-size: 1rem;
+}
+.form-check:hover .form-check-label {
+  text-decoration: underline;
+}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Reservation" %}{% endblock %}
+
+{% block content %}
+<header class="bg-dark py-5">
+  <div class="container px-4 px-lg-5 my-5">
+    <div class="text-center text-white">
+      <h1 class="display-4 fw-bolder">{% trans "Reservation" %}</h1>
+      <p class="lead fw-normal text-white-50 mb-0">{% trans "Hotels, houses, and guest rooms" %}</p>
+    </div>
+  </div>
+</header>
+
+<section class="py-5">
+  <div class="container px-4 px-lg-5 mt-5">
+    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+      {% for house in houses %}
+      <div class="col mb-5">
+        <div class="card h-100 shadow-sm border-0">
+          
+          {% if house.images.first %}
+          <img class="card-img-top" 
+               src="{{ house.images.first.image.url }}" 
+               alt="{{ house.name }}" 
+               style="object-fit: cover; height: 200px;">
+          {% else %}
+          <img class="card-img-top" 
+               src="{% static 'housing/no_image.jpg' %}" 
+               alt="{% trans "No image" %}" 
+               style="object-fit: cover; height: 200px;">
+          {% endif %}
+
+          <div class="card-body p-4 text-center">
+            <h5 class="fw-bolder">{{ house.name }}</h5>
+          </div>
+
+          <div class="card-footer p-3 border-top-0 bg-transparent text-center">
+            <a class="btn btn-outline-dark mt-auto" href="{% url 'house_page' pk=house.id %}">
+              {% trans "View details" %}
+            </a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center">
+        <p class="text-muted fs-5">{% trans "No available hotels at the moment." %}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<footer class="py-5 bg-dark">
+  <div class="container">
+    <p class="m-0 text-center text-white">&copy; {% trans "Your Website" %} 2025</p>
+  </div>
+</footer>
+{% endblock %}

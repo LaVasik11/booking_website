@@ -1,0 +1,66 @@
+{% load socialaccount %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Google Sign-In</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .confirm-card {
+            max-width: 480px;
+            margin: 80px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            background-color: #fff;
+            text-align: center;
+        }
+        .google-logo {
+            width: 50px;
+            margin-bottom: 15px;
+        }
+        .btn-google {
+            background-color: #4285F4;
+            color: #fff;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        .btn-google:hover {
+            background-color: #357ae8;
+        }
+        .btn-cancel {
+            background-color: transparent;
+            border: none;
+            color: #6c757d;
+            margin-top: 10px;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+        .btn-cancel:hover {
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="confirm-card">
+        <img src="{% static 'images/google-logo.png' %}" alt="Google Logo" class="google-logo">
+        <h2 class="mb-3">Continue with Google</h2>
+        {% if sociallogin.account.extra_data.email %}
+            <p class="mb-4">You are signing in as <strong>{{ sociallogin.account.extra_data.email }}</strong>.</p>
+        {% else %}
+            <p class="mb-4">You are about to continue registration using your Google account.</p>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-google btn-lg w-100">Continue</button>
+        </form>
+        <button type="button" class="btn-cancel" onclick="window.history.back()">Cancel</button>
+    </div>
+</body>
+</html>

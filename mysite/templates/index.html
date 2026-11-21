@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<div id="map" style="height: 500px;"></div>
+
+{{ houses|json_script:"houses-data" }}
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script> const i18n = {viewHotel: "{% trans 'View hotel' %}"}; </script>
+<script>
+    const map = L.map('map');
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        referrerPolicy: 'origin'
+    }).addTo(map);
+
+    const houses = JSON.parse(document.getElementById('houses-data').textContent);
+
+
+    const validHouses = houses.filter(h => h.latitude && h.longitude);
+
+    if (validHouses.length > 0) {
+        const markers = validHouses.map(house => {
+            return L.marker([house.latitude, house.longitude])
+                .addTo(map)
+                .bindPopup(`
+                    <strong>${house.name}</strong><br>
+                    ${house.address}<br>
+                    <a href="/${house.lang}/housing/${house.id}/">
+                        ${i18n.viewHotel}
+                    </a>
+                `);
+        });
+
+        const group = new L.featureGroup(markers);
+        map.fitBounds(group.getBounds().pad(0.2));
+    } else {
+        map.setView([41.7151, 44.8271], 12);
+    }
+</script>
+
+{% endblock %}

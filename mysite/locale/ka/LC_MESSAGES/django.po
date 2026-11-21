@@ -1,0 +1,697 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-02 18:34+0000\n"
+"PO-Revision-Date: 2026-02-02 22:42+0400\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.2\n"
+
+#: accounts/templates/accounts/house_owner_profile.html:5
+#: templates/base.html:138
+msgid "Owner profile"
+msgstr "მფლობელის პროფილი"
+
+#: accounts/templates/accounts/house_owner_profile.html:11
+msgid "My hotels"
+msgstr "ჩემი სასტუმროები"
+
+#: accounts/templates/accounts/house_owner_profile.html:15
+msgid "Add hotel"
+msgstr "სასტუმროს დამატება"
+
+#: accounts/templates/accounts/house_owner_profile.html:33
+#: housing/templates/housing/house_page.html:38
+#: housing/templates/housing/house_page.html:77
+#: housing/templates/housing/housing.html:32
+msgid "No image"
+msgstr "სურათი არ არის"
+
+#: accounts/templates/accounts/house_owner_profile.html:63
+#: housing/templates/housing/edit_house.html:141
+msgid "Edit"
+msgstr "რედაქტირება"
+
+#: accounts/templates/accounts/house_owner_profile.html:72
+msgid "You don't have any hotels yet."
+msgstr "ჯერ სასტუმროები არ გაქვთ."
+
+#: accounts/templates/accounts/login.html:11
+msgid "Sign in"
+msgstr "შესვლა"
+
+#: accounts/templates/accounts/login.html:77
+msgid "Welcome back"
+msgstr "კეთილი იყოს თქვენი მობრძანება"
+
+#: accounts/templates/accounts/login.html:110
+msgid "Sign In"
+msgstr "შესვლა"
+
+#: accounts/templates/accounts/login.html:115
+#: accounts/templates/accounts/register.html:118
+msgid "or"
+msgstr "ან"
+
+#: accounts/templates/accounts/login.html:120
+msgid "Google"
+msgstr "გუგლი"
+
+#: accounts/templates/accounts/login.html:123
+#: accounts/templates/accounts/register.html:127
+msgid "Continue with Google"
+msgstr "გაგრძელება Google–ით"
+
+#: accounts/templates/accounts/login.html:127
+msgid "Don’t have an account?"
+msgstr "არა გაქვთ ანგარიში?"
+
+#: accounts/templates/accounts/login.html:130
+#: accounts/templates/accounts/register.html:113
+msgid "Register"
+msgstr "რეგისტრაცია"
+
+#: accounts/templates/accounts/login.html:137
+#: accounts/templates/accounts/register.html:141
+msgid "Back to Home"
+msgstr "უკან მთავარ გვერდზე"
+
+#: accounts/templates/accounts/register.html:12
+msgid "Sign Up"
+msgstr "დარეგისტრირება"
+
+#: accounts/templates/accounts/register.html:79
+msgid "Create an account"
+msgstr "ანგარიშის შექმნა"
+
+#: accounts/templates/accounts/register.html:124
+msgid "Google logo"
+msgstr "Google ლოგო"
+
+#: accounts/templates/accounts/register.html:131
+msgid "Already have an account?"
+msgstr "უკვე გაქვთ ანგარიში?"
+
+#: accounts/templates/accounts/register.html:134
+msgid "Log in"
+msgstr "შესვლა"
+
+#: accounts/templates/accounts/user_profile.html:6
+msgid "My bookings"
+msgstr "ჩემი ჯავშნები"
+
+#: accounts/templates/accounts/user_profile.html:17
+msgid "Guest:"
+msgstr "სტუმარი:"
+
+#: accounts/templates/accounts/user_profile.html:22
+msgid "Dates:"
+msgstr "თარიღები:"
+
+#: accounts/templates/accounts/user_profile.html:27
+msgid "Email:"
+msgstr "ელ. ფოსტა:"
+
+#: accounts/templates/accounts/user_profile.html:32
+msgid "Created:"
+msgstr "შექმნილია:"
+
+#: accounts/templates/accounts/user_profile.html:39
+msgid "You have no bookings yet."
+msgstr "ჯერ არ გაქვთ დაჯავშნა."
+
+#: housing/forms.py:84 housing/templates/housing/room_booking.html:86
+msgid "Select dates"
+msgstr "აირჩიეთ თარიღები"
+
+#: housing/forms.py:110
+msgid "Please select check-in and check-out dates."
+msgstr "გთხოვთ აირჩიოთ ჩაწერის და გასვლის თარიღები."
+
+#: housing/forms.py:117
+msgid "Invalid date range."
+msgstr "თარიღების დიაპაზონი არასწორია."
+
+#: housing/forms.py:120
+msgid "Check-out date must be after check-in date."
+msgstr "გასვლის თარიღი უნდა იყოს ჩაწერის თარიღის შემდეგ."
+
+#: housing/models.py:24
+msgid "Name"
+msgstr "სახელი"
+
+#: housing/models.py:25 housing/models.py:73
+#: housing/templates/housing/room_detail.html:43
+msgid "Description"
+msgstr "აღწერა"
+
+#: housing/models.py:26 housing/templates/housing/house_page.html:56
+msgid "Address"
+msgstr "მისამართი"
+
+#: housing/models.py:32
+msgid "Phone number"
+msgstr "ტელეფონის ნომერი"
+
+#: housing/models.py:71
+msgid "House"
+msgstr "სახლი"
+
+#: housing/models.py:72
+msgid "Room name"
+msgstr "ოთახის სახელი"
+
+#: housing/models.py:74 housing/templates/housing/room_detail.html:47
+msgid "Beds"
+msgstr "საწოლები"
+
+#: housing/models.py:75 housing/templates/housing/room_detail.html:48
+msgid "Sofas"
+msgstr "კომფორტული სავარძლები"
+
+#: housing/models.py:76 housing/templates/housing/edit_house.html:127
+#: housing/templates/housing/room_detail.html:49
+msgid "Floor"
+msgstr "სართული"
+
+#: housing/models.py:77 housing/templates/housing/room_detail.html:50
+msgid "Smoking allowed"
+msgstr "მოწევა დასაშვებია"
+
+#: housing/models.py:78 housing/templates/housing/room_detail.html:51
+msgid "Balcony"
+msgstr "აივანი"
+
+#: housing/models.py:79 housing/templates/housing/room_detail.html:52
+msgid "TV"
+msgstr "ტელევიზორი"
+
+#: housing/models.py:80 housing/templates/housing/room_detail.html:53
+msgid "Air conditioning"
+msgstr "კონდიციონერი"
+
+#: housing/models.py:81 housing/templates/housing/room_detail.html:54
+msgid "Wi-Fi"
+msgstr "Wi-Fi"
+
+#: housing/models.py:82
+msgid "Price per night"
+msgstr "ფასი ღამეზე"
+
+#: housing/models.py:83
+msgid "Discount (%)"
+msgstr "ფასდაკლება (%)"
+
+#: housing/models.py:84
+msgid "Room is available"
+msgstr "ოთახი თავისუფალია"
+
+#: housing/models.py:86
+#, python-format
+msgid "%(name)s (%(beds)s bed(s))"
+msgstr "%(name)s (%(beds)s საწოლი)"
+
+#: housing/templates/housing/add_house.html:4
+msgid "Add Hotel"
+msgstr "სასტუმროს დამატება"
+
+#: housing/templates/housing/add_house.html:12
+msgid "Add a New Hotel"
+msgstr "ახალი სასტუმროს დამატება"
+
+#: housing/templates/housing/add_house.html:13
+msgid "Fill in details to create a new listing"
+msgstr "შეავსეთ დეტალები ახალი განცხადების შესაქმნელად"
+
+#: housing/templates/housing/add_house.html:25
+#: housing/templates/housing/edit_room.html:150
+msgid "Close"
+msgstr "დახურვა"
+
+#: housing/templates/housing/add_house.html:68
+msgid "Upload Hotel Images"
+msgstr "სასტუმროს სურათების ატვირთვა"
+
+#: housing/templates/housing/add_house.html:75
+msgid "Add Photo"
+msgstr "სურათის დამატება"
+
+#: housing/templates/housing/add_house.html:82
+msgid "Create Hotel"
+msgstr "სასტუმროს შექმნა"
+
+#: housing/templates/housing/add_room.html:5
+#: housing/templates/housing/add_room.html:130
+#: housing/templates/housing/edit_house.html:96
+msgid "Add Room"
+msgstr "ოთახის დამატება"
+
+#: housing/templates/housing/add_room.html:13
+msgid "Add a New Room"
+msgstr "დაამატე ახალი ოთახი"
+
+#: housing/templates/housing/add_room.html:14
+msgid "Fill in all the details and upload up to 4 images"
+msgstr "შეავსეთ ყველა დეტალი და ატვირთეთ მაქსიმუმ 4 სურათი"
+
+#: housing/templates/housing/add_room.html:59
+#: housing/templates/housing/edit_room.html:61
+msgid "Room Features"
+msgstr "ოთახის მახასიათებლები"
+
+#: housing/templates/housing/add_room.html:99
+#: housing/templates/housing/edit_room.html:79
+msgid "Room Images (max 4)"
+msgstr "ოთახის სურათები (მაქს 4)"
+
+#: housing/templates/housing/booking_success.html:5
+msgid "Booking successful"
+msgstr "ბროუკინგი წარმატებით შესრულდა"
+
+#: housing/templates/housing/booking_success.html:23
+msgid "Booking successful!"
+msgstr "ბროუკინგი წარმატებით შესრულდა!"
+
+#: housing/templates/housing/booking_success.html:27
+msgid "You have successfully booked the room."
+msgstr "ოთახი წარმატებით დაჯავშნეთ."
+
+#: housing/templates/housing/booking_success.html:35
+msgid "Thank you for choosing our service."
+msgstr "გმადლობთ, რომ აირჩიეთ ჩვენი სერვისი."
+
+#: housing/templates/housing/booking_success.html:41
+msgid "View room details"
+msgstr "ოთახის დეტალების ნახვა"
+
+#: housing/templates/housing/booking_success.html:45
+msgid "Back to home"
+msgstr "დამოუკიდებლად დაბრუნება მთავარ გვერდზე"
+
+#: housing/templates/housing/comments_list.html:31
+msgid "No comments yet. Be the first to comment!"
+msgstr "კომენტარები ჯერ არ არის. იყავით პირველი კომენტარის ავტორი!"
+
+#: housing/templates/housing/comments_list.html:35
+msgid "Comments pagination"
+msgstr "კომენტარების გვერდი"
+
+#: housing/templates/housing/delete_house_confirm.html:4
+#, python-format
+msgid "Delete %(house.name)s"
+msgstr "წაშალე %(house.name)s"
+
+#: housing/templates/housing/delete_house_confirm.html:11
+#, python-format
+msgid "Delete \"%(house.name)s\"?"
+msgstr "გსურთ წაშალოთ \"%(house.name)s\"?"
+
+#: housing/templates/housing/delete_house_confirm.html:15
+msgid ""
+"This action is permanent. All rooms and bookings linked to this hotel will "
+"be irrevocably deleted."
+msgstr ""
+"ეს ქმედება მუდმივია. ყველა ოთახი და ჯავშანი, რომელიც დაკავშირებულია ამ "
+"სასტუმროსთან, უგრძნობლად წაიშლება."
+
+#: housing/templates/housing/delete_house_confirm.html:22
+msgid "Yes, delete"
+msgstr "კი, წაშალე"
+
+#: housing/templates/housing/delete_house_confirm.html:28
+#: housing/templates/housing/edit_house.html:162
+#: housing/templates/housing/edit_room.html:110
+msgid "Cancel"
+msgstr "გაუქმება"
+
+#: housing/templates/housing/edit_house.html:5
+#, python-format
+msgid "Edit House — %(house.name)s"
+msgstr "სასტუმროს რედაქტირება — %(house.name)s"
+
+#: housing/templates/housing/edit_house.html:16
+msgid "Edit House"
+msgstr "სასტუმროს რედაქტირება"
+
+#: housing/templates/housing/edit_house.html:17
+msgid "Update information and images for this house"
+msgstr "განაახლეთ ინფორმაცია და სურათები ამ სასტუმროსთვის"
+
+#: housing/templates/housing/edit_house.html:52
+msgid "House Images (max 8)"
+msgstr "სასტუმროს სურათები (მაქს 8)"
+
+#: housing/templates/housing/edit_house.html:94
+msgid "Available Rooms"
+msgstr "ხელმისაწვდომი ოთახები"
+
+#: housing/templates/housing/edit_house.html:123
+msgid "bed"
+msgstr "საწოლი"
+
+#: housing/templates/housing/edit_house.html:124
+msgid "sofa"
+msgstr "კუთხის სავარძელი"
+
+#: housing/templates/housing/edit_house.html:136
+msgid "Block dates"
+msgstr "თარიღების დაბლოკვა"
+
+#: housing/templates/housing/edit_house.html:151
+msgid "No rooms yet."
+msgstr "ოთახები ჯერ არ არის."
+
+#: housing/templates/housing/edit_house.html:153
+msgid "Add first room"
+msgstr "დაამატე პირველი ოთახი"
+
+#: housing/templates/housing/edit_house.html:168
+msgid "Delete House"
+msgstr "სასტუმროს წაშლა"
+
+#: housing/templates/housing/edit_house.html:172
+msgid "Save Changes"
+msgstr "ცვლილებების შენახვა"
+
+#: housing/templates/housing/edit_house.html:289
+msgid "Block room dates"
+msgstr "ოთახის თარიღების დაბლოკვა"
+
+#: housing/templates/housing/edit_house.html:297
+msgid "Date range"
+msgstr "თარიღების დიაპაზონი"
+
+#: housing/templates/housing/edit_house.html:305
+msgid "Save"
+msgstr "შენახვა"
+
+#: housing/templates/housing/edit_room.html:5
+#: housing/templates/housing/edit_room.html:14
+#: housing/templates/housing/room_detail.html:83
+msgid "Edit Room"
+msgstr "ოთახის რედაქტირება"
+
+#: housing/templates/housing/edit_room.html:15
+msgid "Update details or images for this room"
+msgstr "განაახლეთ დეტალები ან სურათები ამ ოთახისთვის"
+
+#: housing/templates/housing/edit_room.html:125
+#: housing/templates/housing/edit_room.html:259
+msgid "Disable room"
+msgstr "ოთახის გათიშვა"
+
+#: housing/templates/housing/edit_room.html:127
+#: housing/templates/housing/edit_room.html:263
+msgid "Enable room"
+msgstr "ოთახის ჩართვა"
+
+#: housing/templates/housing/edit_room.html:132
+#: housing/templates/housing/room_detail.html:90
+msgid "Delete Room"
+msgstr "ოთახის წაშლა"
+
+#: housing/templates/housing/edit_room.html:136
+msgid "Save Room"
+msgstr "ოთახის შენახვა"
+
+#: housing/templates/housing/edit_room.html:158
+msgid "Please correct the following errors:"
+msgstr "გთხოვთ, დაარედაქტიროთ შემდეგი შეცდომები:"
+
+#: housing/templates/housing/edit_room.html:175
+msgid "Image form"
+msgstr "სურათის ფორმა"
+
+#: housing/templates/housing/edit_room.html:231
+msgid ""
+"Are you sure you want to delete this room? This action cannot be undone."
+msgstr ""
+"დარწმუნებული ხართ, რომ გინდათ ამ ოთახის წაშლა? ეს ქმედება გაუქმების გარეშეა."
+
+#: housing/templates/housing/house_page.html:5
+#: housing/templates/housing/housing.html:5
+#: housing/templates/housing/housing.html:11
+msgid "Reservation"
+msgstr "ჯავშანი"
+
+#: housing/templates/housing/house_page.html:30
+#: housing/templates/housing/room_detail.html:30
+msgid "Previous"
+msgstr "წინა"
+
+#: housing/templates/housing/house_page.html:34
+#: housing/templates/housing/room_detail.html:34
+msgid "Next"
+msgstr "შემდეგი"
+
+#: housing/templates/housing/house_page.html:59
+msgid "Phone"
+msgstr "ტელეფონი"
+
+#: housing/templates/housing/house_page.html:69
+msgid "Available rooms"
+msgstr "ხელმისაწვდომი ოთახები"
+
+#: housing/templates/housing/house_page.html:81
+#, python-format
+msgid "%(beds)s bed%(beds|pluralize)s, %(sofas)s sofa%(sofas|pluralize)s"
+msgstr ""
+"%(beds)s საწოლი%(beds|pluralize)s, %(sofas)s კუთხის "
+"სავარძელი%(sofas|pluralize)s"
+
+#: housing/templates/housing/house_page.html:82
+#, python-format
+msgid " Floor: %(floor)s "
+msgstr " სართული: %(floor)s "
+
+#: housing/templates/housing/house_page.html:98
+msgid "View"
+msgstr "ნახვა"
+
+#: housing/templates/housing/house_page.html:110
+msgid "Delete This House"
+msgstr "აიღე ეს სახლი"
+
+#: housing/templates/housing/house_page.html:120
+msgid "User Comments"
+msgstr "მომხმარებლის კომენტარები"
+
+#: housing/templates/housing/house_page.html:127
+msgid "Rate this hotel:"
+msgstr "შეაფასეთ ეს სასტუმრო:"
+
+#: housing/templates/housing/house_page.html:139
+msgid "Submit"
+msgstr "გაგზავნა"
+
+#: housing/templates/housing/house_page.html:144
+msgid "Only users who have booked a room in this hotel can leave a review."
+msgstr ""
+"მხოლოდ იმ მომხმარებლებს, რომლებმაც დაჯავშნეს ოთახი ამ სასტუმროში, შეუძლიათ "
+"დატოვონ მიმოხილვა."
+
+#: housing/templates/housing/house_page.html:146
+msgid "You have already rated this hotel."
+msgstr "თქვენ უკვე შეაფასეთ ეს სასტუმრო."
+
+#: housing/templates/housing/house_page.html:148
+msgid "You must"
+msgstr "თქვენ უნდა"
+
+#: housing/templates/housing/house_page.html:148
+msgid "log in"
+msgstr "შესვლა"
+
+#: housing/templates/housing/house_page.html:148
+msgid "to leave a comment."
+msgstr "კომენტარის დასატოვებლად."
+
+#: housing/templates/housing/housing.html:12
+msgid "Hotels, houses, and guest rooms"
+msgstr "სასტუმროები, სახლები და სტუმრის ოთახები"
+
+#: housing/templates/housing/housing.html:42
+msgid "View details"
+msgstr "იხილეთ დეტალები"
+
+#: housing/templates/housing/housing.html:49
+msgid "No available hotels at the moment."
+msgstr "ამჟამად არცერთი სასტუმრო ხელმისაწვდომი არ არის."
+
+#: housing/templates/housing/housing.html:58
+msgid "Your Website"
+msgstr "თქვენი ვებსაიტი"
+
+#: housing/templates/housing/room_booking.html:6
+msgid "Room booking"
+msgstr "ოთახის დაჯავშნა"
+
+#: housing/templates/housing/room_booking.html:23
+msgid "Book room"
+msgstr "დაჯავშნოთ ოთახი"
+
+#: housing/templates/housing/room_booking.html:49
+msgid "Guest information"
+msgstr "სტუმრის ინფორმაცია"
+
+#: housing/templates/housing/room_booking.html:53
+msgid "First name"
+msgstr "სახელი"
+
+#: housing/templates/housing/room_booking.html:63
+msgid "Last name"
+msgstr "გვარი"
+
+#: housing/templates/housing/room_booking.html:74
+msgid "Email"
+msgstr "ელ. ფოსტა"
+
+#: housing/templates/housing/room_booking.html:83
+msgid "Booking dates"
+msgstr "დაჯავშნის თარიღები"
+
+#: housing/templates/housing/room_booking.html:101
+msgid "Back to room"
+msgstr "უკან ოთახზე"
+
+#: housing/templates/housing/room_booking.html:104
+msgid "Confirm booking"
+msgstr "დაჯავშნის დადასტურება"
+
+#: housing/templates/housing/room_booking.html:113
+msgid "No payment required at this step"
+msgstr "ამ ეტაპზე გადახდა არ არის საჭირო"
+
+#: housing/templates/housing/room_detail.html:24
+msgid "Room Image"
+msgstr "ოთახის სურათი"
+
+#: housing/templates/housing/room_detail.html:38
+msgid "No photos available"
+msgstr "სურათები არ არის ხელმისაწვდომი"
+
+#: housing/templates/housing/room_detail.html:44
+msgid "No description provided"
+msgstr "აღწერა არ არის მიწოდებული"
+
+#: housing/templates/housing/room_detail.html:50
+#: housing/templates/housing/room_detail.html:51
+#: housing/templates/housing/room_detail.html:52
+#: housing/templates/housing/room_detail.html:53
+#: housing/templates/housing/room_detail.html:54
+#: housing/templates/housing/room_detail.html:55
+msgid "Yes,No"
+msgstr "დიახ,არა"
+
+#: housing/templates/housing/room_detail.html:55
+msgid "Available"
+msgstr "ხელმისაწვდომი"
+
+#: housing/templates/housing/room_detail.html:67
+#: housing/templates/housing/room_detail.html:72
+msgid "night"
+msgstr "ღამე"
+
+#: housing/templates/housing/room_detail.html:79
+msgid "Back to House"
+msgstr "უკან სახლზე"
+
+#: housing/templates/housing/room_detail.html:80
+msgid "Book Now"
+msgstr "დაჯავშნეთ ახლა"
+
+#: housing/views.py:194 housing/views.py:198 housing/views.py:410
+msgid "Invalid dates"
+msgstr "არასწორი თარიღები"
+
+#: housing/views.py:207 housing/views.py:419
+msgid "Room is already booked for these dates"
+msgstr "ოთახი უკვე დაჯავშნილია ამ თარიღებისთვის"
+
+#: housing/views.py:221
+msgid "Dates successfully blocked"
+msgstr "თარიღები წარმატებით დაბლოკილია"
+
+#: housing/views.py:230
+msgid "House updated successfully"
+msgstr "სახლი წარმატებით განახლდა"
+
+#: housing/views.py:389
+msgid "Are you sure you want to delete this room?"
+msgstr "დარწმუნებული ხართ, რომ გინდათ ამ ოთახის წაშლა?"
+
+#: housing/views.py:432
+msgid "Booking successfully created"
+msgstr "დაჯავშნა წარმატებით შეიქმნა"
+
+#: mysite/settings.py:21
+msgid "English"
+msgstr "ინგლისური"
+
+#: mysite/settings.py:22
+msgid "Russian"
+msgstr "რუსული"
+
+#: mysite/settings.py:23
+msgid "Georgian"
+msgstr "ქართული"
+
+#: templates/base.html:13
+msgid "My site"
+msgstr "ჩემი საიტი"
+
+#: templates/base.html:47
+msgid "Start Bootstrap"
+msgstr "სტარტ ბუტსტრაპი"
+
+#: templates/base.html:53
+msgid "Recreation"
+msgstr "გამაჯანსაღებელი"
+
+#: templates/base.html:57
+msgid "Entertainment"
+msgstr "გასართობი"
+
+#: templates/base.html:61
+msgid "Something else 1"
+msgstr "სხვა რამ 1"
+
+#: templates/base.html:65
+msgid "Something else 2"
+msgstr "სხვა რამ 2"
+
+#: templates/base.html:69
+msgid "Something else 3"
+msgstr "სხვა რამ 3"
+
+#: templates/base.html:81
+msgid "Menu"
+msgstr "მენიუ"
+
+#: templates/base.html:146
+msgid "My reservations"
+msgstr "ჩემი დათქმები"
+
+#: templates/base.html:154
+msgid "Logout"
+msgstr "გამოსვლა"
+
+#: templates/base.html:162
+msgid "Login"
+msgstr "შესვლა"
+
+#: templates/index.html:12
+msgid "View hotel"
+msgstr "იხილეთ სასტუმრო"

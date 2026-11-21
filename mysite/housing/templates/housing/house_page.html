@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ house.name }} — {% trans "Reservation" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-8">
+      <article class="card shadow-lg border-0 rounded-4 mb-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center rounded-top-4">
+          <h2 class="fw-bold mb-0">{{ house.name }}</h2>
+          {% if house.discount > 0 %}
+          <span class="badge bg-warning text-dark fs-6">-{{ house.discount }}%</span>
+          {% endif %}
+        </div>
+
+        {% if house.images.exists %}
+        <div id="houseCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            {% for img in house.images.all %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+              <img src="{{ img.image.url }}" class="d-block w-100" style="object-fit: cover; height: 400px;" alt="{{ house.name }}">
+            </div>
+            {% endfor %}
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#houseCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">{% trans "Previous" %}</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#houseCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">{% trans "Next" %}</span>
+          </button>
+        </div>
+        {% else %}
+        <img src="{% static 'housing/no_image.jpg' %}" alt="{% trans 'No image' %}" class="img-fluid" style="object-fit: cover; height: 400px; width: 100%;">
+        {% endif %}
+
+        <div class="card-body p-4">
+          <div class="mb-2">
+            {% for _ in full_stars %}
+              <span class="star full">&#9733;</span>
+            {% endfor %}
+            {% if half_star %}
+              <span class="star half">&#9733;</span>
+            {% endif %}
+            {% for _ in empty_stars %}
+              <span class="star empty">&#9733;</span>
+            {% endfor %}
+            <small class="text-muted">({{ average_rating|floatformat:1 }})</small>
+          </div>
+
+          {% if house.address %}
+          <p><i class="bi bi-geo-alt-fill text-primary"></i> <strong>{% trans "Address" %}:</strong> {{ house.address }}</p>
+          {% endif %}
+          {% if house.phone_number %}
+          <p><i class="bi bi-telephone-fill text-primary"></i> <strong>{% trans "Phone" %}:</strong> {{ house.phone_number }}</p>
+          {% endif %}
+          <hr>
+
+          {% if house.description %}
+          <p class="fs-5 lh-lg text-muted">{{ house.description }}</p>
+          {% endif %}
+          <hr>
+
+          {% if house.rooms.exists %}
+              <h5 class="text-secondary mb-3">{% trans "Available rooms" %}</h5>
+            <div class="row g-4">
+              {% for room in rooms %}
+              <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm room-item" data-href="{% url 'room_detail' pk=room.id %}" tabindex="0">
+                  {% if room.images.exists %}
+                  <img src="{{ room.images.first.image.url }}" class="card-img-top" style="height:200px; object-fit:cover;" alt="{{ room.name }}">
+                  {% else %}
+                  <img src="{% static 'housing/no_image.jpg' %}" class="card-img-top" style="height:200px; object-fit:cover;" alt="{% trans 'No image' %}">
+                  {% endif %}
+                  <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ room.name }}</h5>
+                    <p class="card-text mb-1">{% blocktrans with beds=room.beds sofas=room.sofas %}{{ beds }} bed{{ beds|pluralize }}, {{ sofas }} sofa{{ sofas|pluralize }}{% endblocktrans %}</p>
+                    <p class="card-text mb-2">{% blocktrans with floor=room.floor %} Floor: {{ floor }} {% endblocktrans %}</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                      {% if room.discount > 0 %}
+                        <div class="d-flex flex-column">
+                          <span class="text-muted text-decoration-line-through small">
+                            ₾{{ room.price_per_night|floatformat:0 }}
+                          </span>
+                          <span class="text-success fw-bold">
+                            ₾{{ room.discounted_price|floatformat:0 }}
+                          </span>
+                        </div>
+                      {% else %}
+                        <span class="text-success fw-bold">
+                          ₾{{ room.price_per_night|floatformat:0 }}
+                        </span>
+                      {% endif %}
+                      <a href="{% url 'room_detail' pk=room.id %}" class="btn btn-sm btn-outline-primary">{% trans "View" %}</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <div class="d-grid gap-2 mt-3">
+            {% if user.is_superuser %}
+                <a href="{% url 'delete_house_confirm' pk=house.id %}" class="btn btn-danger">
+                    {% trans "Delete This House" %}
+                </a>
+            {% endif %}
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card shadow-lg border-0 sticky-top" style="top: 80px;">
+        <div class="card-header bg-light fw-bold">{% trans "User Comments" %}</div>
+        <div class="card-body">
+          {% if user.is_authenticated and has_booking and not existing_comment %}
+            <form id="comment-form" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="selected-rating" name="rating" value="5">
+
+                <label class="form-label fw-bold">{% trans "Rate this hotel:" %}</label>
+                <div class="star-rating d-flex flex-row-reverse justify-content-end mb-3">
+                    {% for i in "54321" %}
+                    <input type="radio" id="star{{ i }}" class="d-none">
+                    <label for="star{{ i }}" class="star fs-3 text-secondary" style="cursor:pointer;">&#9733;</label>
+                    {% endfor %}
+                </div>
+
+                {{ form.content }}
+
+                <div class="text-end mt-2">
+                    <button class="btn btn-primary btn-sm" type="button" id="submit-comment">
+                        {% trans "Submit" %}
+                    </button>
+                </div>
+            </form>
+          {% elif user.is_authenticated and not has_booking %}
+            <p class="text-muted">{% trans "Only users who have booked a room in this hotel can leave a review." %}</p>
+          {% elif user.is_authenticated and existing_comment %}
+            <p class="text-muted">{% trans "You have already rated this hotel." %}</p>
+          {% else %}
+            <p class="text-muted">{% trans "You must" %} <a href="{% url 'login' %}">{% trans "log in" %}</a> {% trans "to leave a comment." %}</p>
+          {% endif %}
+
+          <hr>
+          <div id="comments-container">
+            {% include 'housing/comments_list.html' %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('comment-form');
+  if (!form) return;
+
+  const stars = form.querySelectorAll('.star-rating label');
+  const hiddenRating = document.getElementById('selected-rating');
+  hiddenRating.value = 5;
+
+  stars.forEach(label => {
+    const val = parseInt(label.htmlFor.replace('star',''), 10);
+    label.classList.toggle('text-warning', val <= 5);
+    label.classList.toggle('text-secondary', val > 5);
+
+    label.addEventListener('click', e => {
+      e.preventDefault();
+      hiddenRating.value = val;
+      stars.forEach(l => {
+        const v = parseInt(l.htmlFor.replace('star',''),10);
+        l.classList.toggle('text-warning', v <= val);
+        l.classList.toggle('text-secondary', v > val);
+      });
+    });
+  });
+
+  function getCSRFToken() {
+    return document.cookie.match('(^|;)\\s*csrftoken\\s*=\\s*([^;]+)')?.pop();
+  }
+
+  document.getElementById('submit-comment').addEventListener('click', () => {
+    const formData = new FormData(form);
+
+    fetch(window.location.href, {
+      method: 'POST',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRFToken': getCSRFToken()
+      },
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) window.location.reload();
+      else if (data.error) alert(data.error);
+    })
+    .catch(err => { console.error(err); alert('Something went wrong'); });
+  });
+
+  document.querySelectorAll('.comment-page').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const page = link.dataset.page;
+      const formData = new FormData();
+      formData.append('page', page);
+
+      fetch(window.location.href, {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRFToken': getCSRFToken()
+        },
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) document.getElementById('comments-container').innerHTML = data.comments_html;
+      });
+    });
+  });
+
+  document.querySelectorAll('.room-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const href = el.dataset.href;
+      if (href) window.location.href = href;
+    });
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const href = el.dataset.href;
+        if (href) window.location.href = href;
+      }
+    });
+  });
+});
+</script>
+
+{% endblock %}

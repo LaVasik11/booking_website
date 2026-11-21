@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Edit Room" %} — {{ room.name }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-warning text-dark text-center rounded-top-4 py-3">
+          <h3 class="fw-bold mb-1">{% trans "Edit Room" %}</h3>
+          <p class="mb-0 text-muted">{% trans "Update details or images for this room" %}</p>
+        </div>
+
+        <div class="card-body p-4">
+          <form method="POST" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {{ formset.management_form }}
+
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ form.name.label }}</label>
+                {{ form.name }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ form.beds.label }}</label>
+                {{ form.beds }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ form.sofas.label }}</label>
+                {{ form.sofas }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ form.floor.label }}</label>
+                {{ form.floor }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ form.price_per_night.label }}</label>
+                {{ form.price_per_night }}
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ form.discount.label }}</label>
+                <div class="input-group">
+                  {{ form.discount }}
+                  <span class="input-group-text">%</span>
+                </div>
+              </div>
+              <div class="col-md-6 d-flex align-items-center mt-3">
+                <div class="form-check">
+                  {{ form.available }}
+                  <label class="form-check-label">{{ form.available.label }}</label>
+                </div>
+              </div>
+            </div>
+
+            <h5 class="fw-bold text-secondary mb-3">{% trans "Room Features" %}</h5>
+            <div class="row g-3 mb-4">
+            {% for field in feature_fields %}
+                <div class="col-md-4">
+                <div class="form-check">
+                    {{ field }}
+                    <label class="form-check-label">{{ field.label }}</label>
+                </div>
+                </div>
+            {% endfor %}
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-semibold">{{ form.description.label }}</label>
+              {{ form.description }}
+            </div>
+
+            <hr class="my-4">
+            <h5 class="fw-bold mb-3 text-secondary">{% trans "Room Images (max 4)" %}</h5>
+
+            <div id="image-container" class="d-flex flex-wrap gap-3 mb-4">
+            {% for img_form in formset.forms %}
+                <div class="image-slot position-relative border border-2 border-dashed rounded-4 d-flex align-items-center justify-content-center bg-light"
+                    style="width:130px; height:130px; cursor:pointer; transition:0.3s; overflow:hidden;">
+                
+                {% if img_form.instance.pk and img_form.instance.image %}
+                    <img src="{{ img_form.instance.image.url }}" class="img-preview rounded-4"
+                        style="width:100%; height:100%; object-fit:cover;">
+                {% else %}
+                    <img class="img-preview rounded-4" style="width:100%; height:100%; object-fit:cover; display:none;">
+                {% endif %}
+
+                <div style="display:none;">
+                    {{ img_form.image }}
+                    {% if img_form.DELETE %}
+                    {{ img_form.DELETE }}
+                    {% endif %}
+                    {% if img_form.id %}
+                    {{ img_form.id }}
+                    {% endif %}
+                </div>
+
+                <span class="remove-btn position-absolute top-0 end-0 bg-danger text-white fw-bold rounded-circle px-2"
+                        style="cursor:pointer; font-size:18px; line-height:1;">×</span>
+                </div>
+            {% endfor %}
+            </div>
+            <div class="d-flex justify-content-between mt-4">
+            <a href="{% url 'edit_house' pk=house.id %}" class="btn btn-outline-secondary px-4 py-2 rounded-3">
+                {% trans "Cancel" %}
+            </a>
+            <button
+              type="button"
+              id="toggle-room-btn"
+              data-url="{% url 'toggle_room_active' pk=room.id %}"
+              class="btn px-4 py-2 rounded-3
+                {% if room.is_active %}
+                  btn-outline-warning
+                {% else %}
+                  btn-outline-success
+                {% endif %}
+              "
+            >
+              {% if room.is_active %}
+                {% trans "Disable room" %}
+              {% else %}
+                {% trans "Enable room" %}
+              {% endif %}
+            </button>
+            <div>
+                <button type="button" id="delete-room-btn" class="btn btn-danger px-4 py-2 rounded-3 me-2">
+                    {% trans "Delete Room" %}
+                </button>
+
+                <button type="submit" class="btn btn-primary px-4 py-2 rounded-3">
+                    {% trans "Save Room" %}
+                </button>
+            </div>
+        </div>
+          </form>
+        </div>
+
+        {% if local_messages %}
+          {% for msg in local_messages %}
+            <div class="alert alert-{{ msg.type }} alert-dismissible fade show" role="alert">
+              {{ msg.text }}
+              <button type="button"
+                      class="btn-close"
+                      data-bs-dismiss="alert"
+                      aria-label="{% trans 'Close' %}">
+              </button>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        {% if form.errors or formset.errors %}
+          <div class="alert alert-danger">
+            <h6 class="fw-bold">{% trans "Please correct the following errors:" %}</h6>
+            <ul class="mb-0">
+
+              {% for field, errors in form.errors.items %}
+                <li>
+                  <strong>{{ field|capfirst }}:</strong>
+                  {{ errors|join:", " }}
+                </li>
+              {% endfor %}
+
+              {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+
+              {% for subform in formset.forms %}
+                {% for field, errors in subform.errors.items %}
+                  <li>
+                    <strong>{% trans "Image form" %}:</strong>
+                    {{ errors|join:", " }}
+                  </li>
+                {% endfor %}
+              {% endfor %}
+
+            </ul>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const imageSlots = document.querySelectorAll('.image-slot');
+
+  imageSlots.forEach(slot => {
+    const input = slot.querySelector('input[type="file"]');
+    const preview = slot.querySelector('.img-preview');
+    const removeBtn = slot.querySelector('.remove-btn');
+    const deleteCheckbox = slot.querySelector('input[type="checkbox"]');
+
+    input.style.display = 'none';
+
+    slot.addEventListener('click', e => {
+      if (e.target === removeBtn) return;
+      input.click();
+    });
+
+    input.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = 'block';
+        removeBtn.style.display = 'block';
+        slot.classList.remove('bg-light');
+        slot.classList.add('border-primary');
+        if (deleteCheckbox) deleteCheckbox.checked = false;
+      }
+    });
+
+    removeBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      input.value = '';
+      preview.style.display = 'none';
+      if (deleteCheckbox) deleteCheckbox.checked = true;
+      slot.classList.add('bg-light');
+      slot.classList.remove('border-primary');
+    });
+  });
+
+  const deleteBtn = document.getElementById('delete-room-btn');
+  if (deleteBtn) {
+    deleteBtn.addEventListener('click', () => {
+      if (confirm("{% trans 'Are you sure you want to delete this room? This action cannot be undone.' %}")) {
+        window.location.href = "{% url 'delete_room' pk=room.id %}";
+      }
+    });
+  }
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const toggleBtn = document.getElementById('toggle-room-btn');
+  if (!toggleBtn) return;
+
+  toggleBtn.addEventListener('click', function () {
+    fetch(toggleBtn.dataset.url, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}',
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.is_active === undefined) return;
+
+      if (data.is_active) {
+        toggleBtn.classList.remove('btn-outline-success');
+        toggleBtn.classList.add('btn-outline-warning');
+        toggleBtn.textContent = "{% trans 'Disable room' %}";
+      } else {
+        toggleBtn.classList.remove('btn-outline-warning');
+        toggleBtn.classList.add('btn-outline-success');
+        toggleBtn.textContent = "{% trans 'Enable room' %}";
+      }
+    });
+  });
+});
+</script>
+
+{% endblock %}

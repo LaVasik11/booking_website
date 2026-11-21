@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ room.name }} — {{ room.house.name }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-header bg-primary text-white rounded-top-4">
+          <h3 class="mb-0 text-center">{{ room.name }}</h3>
+        </div>
+
+        <div class="card-body">
+          <div class="row mb-4">
+            <div class="col-md-6">
+              {% if images %}
+              <div id="roomCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                  {% for img in images %}
+                  <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <img src="{{ img.image.url }}" class="d-block w-100 rounded-3" alt="{% trans "Room Image" %}">
+                  </div>
+                  {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#roomCarousel" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">{% trans "Previous" %}</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#roomCarousel" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">{% trans "Next" %}</span>
+                </button>
+              </div>
+              {% else %}
+              <p class="text-muted text-center">{% trans "No photos available" %}</p>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6">
+              <h5 class="mb-3">{% trans "Description" %}</h5>
+              <p>{{ room.description|default:_("No description provided") }}</p>
+
+              <ul class="list-unstyled">
+                <li><strong>{% trans "Beds" %}:</strong> {{ room.beds }}</li>
+                <li><strong>{% trans "Sofas" %}:</strong> {{ room.sofas }}</li>
+                <li><strong>{% trans "Floor" %}:</strong> {{ room.floor }}</li>
+                <li><strong>{% trans "Smoking allowed" %}:</strong> {{ room.smoking_allowed|yesno:_("Yes,No") }}</li>
+                <li><strong>{% trans "Balcony" %}:</strong> {{ room.has_balcony|yesno:_("Yes,No") }}</li>
+                <li><strong>{% trans "TV" %}:</strong> {{ room.has_tv|yesno:_("Yes,No") }}</li>
+                <li><strong>{% trans "Air conditioning" %}:</strong> {{ room.has_air_conditioning|yesno:_("Yes,No") }}</li>
+                <li><strong>{% trans "Wi-Fi" %}:</strong> {{ room.has_wifi|yesno:_("Yes,No") }}</li>
+                <li><strong>{% trans "Available" %}:</strong> {{ room.available|yesno:_("Yes,No") }}</li>
+              </ul>
+
+              {% if room.discount > 0 %}
+                <h4 class="mt-3">
+                  <span class="text-muted text-decoration-line-through me-2">
+                    ${{ room.price_per_night|floatformat:0 }}
+                  </span>
+                  <span class="text-success fw-bold">
+                    ${{ room.discounted_price|floatformat:0 }}
+                  </span>
+                  <span class="text-muted">
+                    / {% trans "night" %}
+                  </span>
+                </h4>
+              {% else %}
+                <h4 class="text-success mt-3">
+                  ${{ room.price_per_night|floatformat:0 }} / {% trans "night" %}
+                </h4>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="text-center mt-3">
+            <a href="{% url 'house_page' room.house.id %}" class="btn btn-outline-secondary me-2"> {% trans "Back to House" %}</a>
+            <a href="{% url 'room_booking' room.id %}" class="btn btn-primary me-2">{% trans "Book Now" %}</a>
+
+            {% if user.is_superuser %}
+            <a href="{% url 'edit_room' pk=room.id %}" class="btn btn-warning me-2">{% trans "Edit Room" %}</a>
+
+            <form action="{% url 'delete_room' pk=room.id %}" method="POST" class="d-inline">
+              {% csrf_token %}
+              <button type="submit"
+                      class="btn btn-danger"
+                      onclick="return confirm('{{ delete_room_confirm }}');">
+                {% trans "Delete Room" %}
+              </button>
+            </form>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

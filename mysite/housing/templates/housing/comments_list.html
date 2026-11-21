@@ -1,0 +1,67 @@
+{% load i18n %}
+
+<div id="comments-container">
+    {% for comment in comments %}
+        <div class="mb-3">
+            <strong>{{ comment.user.email }}</strong>
+            <small class="text-muted">
+                — {{ comment.created_at|date:"M d, Y H:i" }}
+            </small>
+
+            <!-- Звёзды -->
+            <p class="mb-1">
+                {% with comment.rating|default:0|add:0 as rating_num %}
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= rating_num %}
+                            <span class="text-warning fs-5">&#9733;</span>
+                        {% else %}
+                            <span class="text-muted fs-5">&#9734;</span>
+                        {% endif %}
+                    {% endfor %}
+                {% endwith %}
+            </p>
+
+            {% if comment.content %}
+                <p class="mb-0">{{ comment.content }}</p>
+            {% endif %}
+
+            <hr>
+        </div>
+    {% empty %}
+        <p class="text-muted">{% trans "No comments yet. Be the first to comment!" %}</p>
+    {% endfor %}
+
+    {% if comments.has_other_pages %}
+    <nav aria-label="{% trans 'Comments pagination' %}">
+        <ul class="pagination justify-content-center">
+            {% if comments.has_previous %}
+                <li class="page-item">
+                    <a href="#" class="page-link comment-page" data-page="{{ comments.previous_page_number }}">&laquo;</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+            {% endif %}
+
+            {% for num in comments.paginator.page_range %}
+                {% if comments.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a href="#" class="page-link comment-page" data-page="{{ num }}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if comments.has_next %}
+                <li class="page-item">
+                    <a href="#" class="page-link comment-page" data-page="{{ comments.next_page_number }}">&raquo;</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>

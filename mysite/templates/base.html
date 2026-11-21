@@ -1,0 +1,178 @@
+{% load i18n %}
+{% load static %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <title>
+        {% block title %}
+            {% trans "My site" %}
+        {% endblock %}
+    </title>
+
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.7.0/css/flag-icons.min.css">
+    <link rel="stylesheet" href="{% static 'housing/css/house_page.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+    <style>
+        .navbar .nav-item.dropdown {
+            position: relative;
+        }
+        .navbar .dropdown-menu {
+            position: absolute !important;
+            top: 100%;
+            right: 0;
+            z-index: 1050;
+            min-width: 120px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="d-flex" id="wrapper">
+
+    <div class="border-end bg-white" id="sidebar-wrapper">
+        <a class="sidebar-heading border-bottom bg-light d-block text-decoration-none text-dark"
+           href="{% url 'home' %}">
+            <i class="bi bi-house"></i>
+            {% trans "Start Bootstrap" %}
+        </a>
+
+        <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action list-group-item-light p-3"
+               href="{% url 'housing' %}">
+                {% trans "Recreation" %}
+            </a>
+
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">
+                {% trans "Entertainment" %}
+            </a>
+
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">
+                {% trans "Something else 1" %}
+            </a>
+
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">
+                {% trans "Something else 2" %}
+            </a>
+
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">
+                {% trans "Something else 3" %}
+            </a>
+        </div>
+    </div>
+
+    <div id="page-content-wrapper">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom shadow-sm py-2">
+            <div class="container-fluid">
+
+                <button class="btn btn-outline-primary rounded-pill px-3" id="sidebarToggle">
+                    <i class="bi bi-list"></i>
+                    {% trans "Menu" %}
+                </button>
+
+                <div class="d-flex align-items-center ms-auto gap-3">
+                    <div class="ms-auto">
+                        <form action="{% url 'set_language' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {% if LANGUAGE_CODE == 'en' %}
+                                        🇺🇸 English
+                                    {% elif LANGUAGE_CODE == 'ru' %}
+                                        🇷🇺 Russian
+                                    {% elif LANGUAGE_CODE == 'ka' %}
+                                        🇬🇪 Georgian
+                                    {% else %}
+                                        🌐 Language
+                                    {% endif %}
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                                    <li>
+                                        <button class="dropdown-item {% if LANGUAGE_CODE == 'en' %}active{% endif %}" type="submit" name="language" value="en">
+                                            🇺🇸 English
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item {% if LANGUAGE_CODE == 'ru' %}active{% endif %}" type="submit" name="language" value="ru">
+                                            🇷🇺 Russian
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item {% if LANGUAGE_CODE == 'ka' %}active{% endif %}" type="submit" name="language" value="ka">
+                                            🇬🇪 Georgian
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </form>
+                    </div>
+
+                    {% if user.is_authenticated %}
+                        <div class="dropdown">
+                            <a class="btn btn-outline-dark rounded-pill d-flex align-items-center px-3"
+                               href="#" id="userDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle me-2"></i>
+                                <span class="d-none d-md-inline">{{ user.email }}</span>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm"
+                                aria-labelledby="userDropdown">
+
+                                {% if user.role == 'hotel_owner' or user.is_superuser %}
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'owner_profile' %}">
+                                            <i class="bi bi-house-door me-2"></i>
+                                            {% trans "Owner profile" %}
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                {% else %}
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'user_profile' %}">
+                                            <i class="bi bi-person me-2"></i>
+                                            {% trans "My reservations" %}
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+                                <li>
+                                    <a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                                        <i class="bi bi-box-arrow-right me-2"></i>
+                                        {% trans "Logout" %}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a class="btn btn-success rounded-pill px-4" href="{% url 'login' %}">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>
+                            {% trans "Login" %}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid mt-4">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'js/scripts.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,312 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% blocktrans %}Edit House — {{ house.name }}{% endblocktrans %}{% endblock %}
+
+{% block content %}
+{{ booked_ranges_by_room|json_script:"booked-ranges-by-room" }}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-0 rounded-4">
+
+        <!-- Header -->
+        <div class="card-header bg-primary text-white text-center rounded-top-4 py-3">
+          <h3 class="fw-bold mb-1">{% trans "Edit House" %}</h3>
+          <p class="mb-0 text-white-50">{% trans "Update information and images for this house" %}</p>
+        </div>
+
+        <!-- Card body -->
+        <div class="card-body p-4">
+
+          <form method="POST" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {{ formset.management_form }}
+
+            <!-- Fields -->
+            <div class="row g-3 mb-4">
+              <div class="col-md-12">
+                <label class="form-label fw-semibold">{% trans form.name.label %}</label>
+                {{ form.name }}
+              </div>
+
+              <div class="col-md-12">
+                <label class="form-label fw-semibold">{% trans form.description.label %}</label>
+                {{ form.description }}
+              </div>
+
+              <div class="col-md-12">
+                <label class="form-label fw-semibold">{% trans form.address.label %}</label>
+                {{ form.address }}
+              </div>
+
+              <div class="col-md-12">
+                <label class="form-label fw-semibold">{% trans form.phone_number.label %}</label>
+                {{ form.phone_number }}
+              </div>
+            </div>
+
+            <hr class="my-4">
+            <h5 class="fw-bold mb-3 text-secondary">{% trans "House Images (max 8)" %}</h5>
+
+            <!-- Image Upload UI -->
+            <div class="row g-3 mb-4">
+              {% for img_form in formset.forms %}
+              <div class="col-3">
+                <div class="image-slot position-relative border border-2 
+                            border-dashed rounded-4 d-flex align-items-center 
+                            justify-content-center bg-light"
+                    style="width:100%; aspect-ratio:1; cursor:pointer; transition:0.3s; overflow:hidden;">
+
+                  {% if img_form.instance.pk and img_form.instance.image %}
+                  <img src="{{ img_form.instance.image.url }}" 
+                      class="img-preview rounded-4"
+                      style="width:100%; height:100%; object-fit:cover;">
+                  {% else %}
+                  <img class="img-preview rounded-4"
+                      style="width:100%; height:100%; object-fit:cover; display:none;">
+                  {% endif %}
+
+                  <div style="display:none;">
+                    {{ img_form.image }}
+                    {% if img_form.DELETE %}
+                      {{ img_form.DELETE }}
+                    {% endif %}
+                    {% if img_form.id %}
+                      {{ img_form.id }}
+                    {% endif %}
+                  </div>
+
+                  <span class="remove-btn position-absolute top-0 end-0 bg-danger text-white fw-bold rounded-circle px-2"
+                      style="cursor:pointer; font-size:18px; line-height:1;">×</span>
+
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+
+            <hr class="my-4">
+
+            {% if house.rooms.all %}
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="fw-bold text-secondary mb-0">{% trans "Available Rooms" %}</h5>
+              <a href="{% url 'add_room' pk=house.id %}" class="btn btn-sm btn-success">
+                + {% trans "Add Room" %}
+              </a>
+            </div>
+
+            <div class="row g-4 mb-4">
+              {% for room in house.rooms.all %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                  <div class="card h-100 shadow-sm position-relative">
+                    {% if room.images.first %}
+                      <img src="{{ room.images.first.image.url }}"
+                          class="card-img-top"
+                          style="height:200px; object-fit:cover;">
+                    {% else %}
+                      <img src="{% static 'housing/no_image.jpg' %}"
+                          class="card-img-top"
+                          style="height:200px; object-fit:cover;">
+                    {% endif %}
+
+                    <div class="card-body d-flex flex-column">
+                      <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title mb-0">{{ room.name }}</h5>
+                        <span class="text-success fw-bold">
+                          ₾{{ room.price_per_night|floatformat:0 }}
+                        </span>
+                      </div>
+
+                      <p class="card-text mb-1">
+                        {{ room.beds }} {% trans "bed" %}{{ room.beds|pluralize }},
+                        {{ room.sofas }} {% trans "sofa" %}{{ room.sofas|pluralize }}
+                      </p>
+
+                      <p class="card-text mb-3">{% trans "Floor" %}: {{ room.floor }}</p>
+
+                      <div class="mt-auto d-flex gap-2">
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-warning flex-fill"
+                          data-bs-toggle="modal"
+                          data-bs-target="#ownerBookingModal"
+                          data-room-id="{{ room.id }}">
+                          {% trans "Block dates" %}
+                        </button>
+
+                        <a href="{% url 'edit_room' pk=room.id %}"
+                          class="btn btn-sm btn-outline-primary flex-fill">
+                          {% trans "Edit" %}
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center text-muted my-4">
+              <p>{% trans "No rooms yet." %}</p>
+              <a href="{% url 'add_room' pk=house.id %}" class="btn btn-success">
+                {% trans "Add first room" %}
+              </a>
+            </div>
+            {% endif %}
+
+            <!-- Buttons -->
+            <div class="d-flex justify-content-between mt-4">
+              <a href="{% url 'owner_profile' %}" 
+                 class="btn btn-outline-secondary px-4 py-2 rounded-3">
+                {% trans "Cancel" %}
+              </a>
+
+              <div>
+                <a href="{% url 'delete_house_confirm'  pk=house.id %}" 
+                  class="btn btn-danger px-4 py-2 rounded-3 me-2">
+                  {% trans "Delete House" %}
+                </a>
+
+                <button type="submit" class="btn btn-primary px-4 py-2 rounded-3">
+                  {% trans "Save Changes" %}
+                </button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.image-slot').forEach(slot => {
+    const input = slot.querySelector('input[type="file"]');
+    const preview = slot.querySelector('.img-preview');
+    const removeBtn = slot.querySelector('.remove-btn');
+    const deleteCheckbox = slot.querySelector('input[type="checkbox"]');
+
+    input.style.display = 'none';
+
+    slot.addEventListener('click', e => {
+      if (e.target === removeBtn) return;
+      input.click();
+    });
+
+    input.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = 'block';
+        if (deleteCheckbox) deleteCheckbox.checked = false;
+      }
+    });
+
+    removeBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (deleteCheckbox) deleteCheckbox.checked = true;
+      input.value = '';
+      preview.style.display = 'none';
+    });
+  });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  const data = JSON.parse(
+    document.getElementById('booked-ranges-by-room').textContent
+  );
+
+  const modal = document.getElementById('ownerBookingModal');
+  const roomInput = document.getElementById('booking-room-id');
+  const dateFromInput = document.querySelector('input[name="date_from"]');
+  const dateToInput = document.querySelector('input[name="date_to"]');
+
+  let picker = null;
+
+  function buildDisabledDates(ranges) {
+    return ranges.flatMap(range => {
+      let dates = [];
+      let start = new Date(range.from);
+      let end = new Date(range.to);
+      while (start <= end) {
+        dates.push(new Date(start));
+        start.setDate(start.getDate() + 1);
+      }
+      return dates;
+    });
+  }
+
+  modal.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    const roomId = button.dataset.roomId;
+
+    roomInput.value = roomId;
+
+    if (picker) {
+      picker.destroy();
+    }
+
+    const bookedRanges = data[roomId] || [];
+    const disabledDates = buildDisabledDates(bookedRanges);
+
+    picker = flatpickr('#owner-date-range', {
+      mode: 'range',
+      dateFormat: 'Y-m-d',
+      minDate: 'today',
+      showMonths: 2,
+      disable: disabledDates,
+      onChange(selectedDates) {
+        if (selectedDates.length === 2) {
+          // Используем локальные даты, чтобы избежать сдвига
+          function formatDate(d) {
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
+          }
+          dateFromInput.value = formatDate(selectedDates[0]);
+          dateToInput.value = formatDate(selectedDates[1]);
+        }
+      }
+    });
+  });
+
+});
+</script>
+
+<div class="modal fade" id="ownerBookingModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form method="post">
+      {% csrf_token %}
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{% trans "Block room dates" %}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" name="room_id" id="booking-room-id">
+
+          <div class="mb-3">
+            <label class="form-label">{% trans "Date range" %}</label>
+            <input type="text" id="owner-date-range" class="form-control" required>
+            <input type="hidden" name="date_from">
+            <input type="hidden" name="date_to">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
